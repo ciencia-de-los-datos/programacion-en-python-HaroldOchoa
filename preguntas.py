@@ -12,8 +12,39 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 """
 
+##Se extraen los datos del archivo
+file=open('data.csv',mode='r',encoding='utf-8').readlines()
+data=[rows.replace("\n","").split("\t") for rows in file]
+
+#Hice una función que tomara una fila en especifico
+def getColumn(number):
+    myList=list()
+    for row in data:
+        myList.append(row[number])
+    return myList
+
+##Hice otra función que retorna los máximos y los mínimos de una lista/tupla que tenga 2 elementos
+def findMinMax(equivalent):
+    dictionary=dict()
+    for element in equivalent:
+        keyUse=element[0]
+        valueUse=int(element[1])
+        if keyUse in dictionary.keys():        
+            #Para encontar el máximo
+            if valueUse>dictionary[keyUse]["top"]:
+                dictionary[keyUse]["top"]=valueUse    
+            #Para encontrar el minimo
+            if valueUse<dictionary[keyUse]["bottom"]:
+                dictionary[keyUse]["bottom"]=valueUse
+        else:
+            dictionary[keyUse]={
+                "top":valueUse,
+                "bottom":valueUse
+            }
+    return dictionary
 
 def pregunta_01():
+
     """
     Retorne la suma de la segunda columna.
 
@@ -21,7 +52,8 @@ def pregunta_01():
     214
 
     """
-    return
+    solution=sum(int(x) for x in getColumn(1))
+    return solution
 
 
 def pregunta_02():
@@ -39,8 +71,13 @@ def pregunta_02():
     ]
 
     """
-    return
-
+    letterCount=dict()
+    for letter in sorted(getColumn(0)):
+        if letter in letterCount.keys():
+            letterCount[letter]+=1
+        else:
+            letterCount[letter]=1
+    return sorted(letterCount.items())
 
 def pregunta_03():
     """
@@ -57,7 +94,14 @@ def pregunta_03():
     ]
 
     """
-    return
+    dictionary=dict()
+    columns=zip(getColumn(0),getColumn(1))
+    for row in columns:
+        if row[0] in dictionary.keys():
+            dictionary[row[0]]+=int(row[1])
+        else:
+            dictionary[row[0]]=int(row[1])
+    return sorted(dictionary.items())
 
 
 def pregunta_04():
@@ -82,7 +126,14 @@ def pregunta_04():
     ]
 
     """
-    return
+    dictionary=dict()
+    months=[date.split("-")[1] for date in getColumn(2)]
+    for month in months:
+        if month in dictionary.keys():
+            dictionary[month]+=1
+        else:
+            dictionary[month]=1
+    return sorted(dictionary.items())
 
 
 def pregunta_05():
@@ -100,7 +151,15 @@ def pregunta_05():
     ]
 
     """
-    return
+    dictionary=dict()
+    answer=list()
+    equivalent=zip(getColumn(0),getColumn(1))
+
+    dictionary=findMinMax(equivalent)
+
+    for element in sorted(dictionary.items()):
+        answer.append( (element[0],element[1]["top"], element[1]["bottom"]))
+    return answer
 
 
 def pregunta_06():
@@ -125,7 +184,16 @@ def pregunta_06():
     ]
 
     """
-    return
+    column5=getColumn(4)
+    list_column5=list()
+    answer=list()
+    for elements in column5:
+        for values in elements.split(","):
+            list_column5.append(values.split(":"))
+    dictionary=findMinMax(list_column5)
+    for element in sorted(dictionary.items()):
+        answer.append( (element[0],element[1]['bottom'],element[1]['top']) )
+    return answer
 
 
 def pregunta_07():
@@ -149,7 +217,16 @@ def pregunta_07():
     ]
 
     """
-    return
+    column0=getColumn(0)
+    column1=getColumn(1)
+    dictionary=dict()
+    for index in range(len(column1)):
+        key=column1[index]
+        value=column0[index]
+        if key not in dictionary.keys():
+            dictionary[key]=list()
+        dictionary[key].append(value)
+    return sorted(dictionary.items())
 
 
 def pregunta_08():
@@ -174,7 +251,19 @@ def pregunta_08():
     ]
 
     """
-    return
+    column0=getColumn(0)
+    column1=getColumn(1)
+    dictionary=dict()
+    for index in range(len(getColumn(0))):
+        key=column1[index]
+        value=column0[index]
+        if key not in dictionary.keys():
+            dictionary[key]=list()
+        if value not in dictionary[key]:
+            dictionary[key].append(value)
+    for element in dictionary:
+        dictionary[element]=sorted(dictionary[element])
+    return sorted(dictionary.items())
 
 
 def pregunta_09():
@@ -197,7 +286,21 @@ def pregunta_09():
     }
 
     """
-    return
+    column5=getColumn(4)
+    list_column5=list()
+    dictionary=dict()
+    for elements in column5:
+        for values in elements.split(","):
+            list_column5.append(values.split(":"))
+    
+    for elements in list_column5:
+        key=elements[0]
+        if key in dictionary.keys():
+            dictionary[key]+=1
+        else:
+            dictionary[key]=1
+
+    return dict(sorted(dictionary.items(),key=lambda item: item[0]))
 
 
 def pregunta_10():
@@ -218,7 +321,16 @@ def pregunta_10():
 
 
     """
-    return
+    answer=list()
+    column5=getColumn(4)
+    column4=getColumn(3)
+    column1=getColumn(0)
+    for index in range(0,len(column1)):
+        letter=column1[index]
+        element4=len(column4[index].split(","))
+        element5=len(column5[index].split(","))
+        answer.append( (letter,element4,element5) )
+    return answer
 
 
 def pregunta_11():
@@ -239,7 +351,18 @@ def pregunta_11():
 
 
     """
-    return
+    column4=getColumn(3)
+    column2=getColumn(1)
+    dictionary=dict()
+    for index in range(0,len(column2)):
+        tuple_key=column4[index].split(",")
+        value=int(column2[index])
+        for key in tuple_key:
+            if key in dictionary.keys():
+                dictionary[key]+=value
+            else:
+                dictionary[key]=value
+    return dict(sorted(dictionary.items()))
 
 
 def pregunta_12():
@@ -257,4 +380,16 @@ def pregunta_12():
     }
 
     """
-    return
+    column1=getColumn(0)
+    column5=[subList.split(",") for subList in getColumn(4)]
+    dictionary=dict()
+    for i in range(0,len(column1)):
+        key=column1[i]
+        subList=column5[i]
+        for element in subList:
+            number=int(element.split(":")[1])
+            if key in dictionary.keys():
+                dictionary[key]+=number
+            else:
+                dictionary[key]=number
+    return dict(sorted(dictionary.items() ))
