@@ -11,13 +11,16 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
-
 ##Se extraen los datos del archivo
-file=open('data.csv',mode='r',encoding='utf-8').readlines()
-data=[rows.replace("\n","").split("\t") for rows in file]
+def getData():
+    file=open('data.csv',mode='r',encoding='utf-8').readlines()
+    data=[rows.replace("\n","").split("\t") for rows in file]
+    return data
+
 
 #Hice una función que tomara una fila en especifico
 def getColumn(number):
+    data = getData()
     myList=list()
     for row in data:
         myList.append(row[number])
@@ -221,7 +224,7 @@ def pregunta_07():
     column1=getColumn(1)
     dictionary=dict()
     for index in range(len(column1)):
-        key=int(column1[index])
+        key=column1[index]
         value=column0[index]
         if key not in dictionary.keys():
             dictionary[key]=list()
@@ -255,7 +258,7 @@ def pregunta_08():
     column1=getColumn(1)
     dictionary=dict()
     for index in range(len(getColumn(0))):
-        key=int(column1[index]
+        key=column1[index]
         value=column0[index]
         if key not in dictionary.keys():
             dictionary[key]=list()
