@@ -221,7 +221,7 @@ def pregunta_07():
     column1=getColumn(1)
     dictionary=dict()
     for index in range(len(column1)):
-        key=column1[index]
+        key=int(column1[index])
         value=column0[index]
         if key not in dictionary.keys():
             dictionary[key]=list()
@@ -255,7 +255,7 @@ def pregunta_08():
     column1=getColumn(1)
     dictionary=dict()
     for index in range(len(getColumn(0))):
-        key=column1[index]
+        key=int(column1[index]
         value=column0[index]
         if key not in dictionary.keys():
             dictionary[key]=list()
